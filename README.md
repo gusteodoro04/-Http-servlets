@@ -1,7 +1,7 @@
 # Explorando o protocolo HTTP com Java Servlets
 
 Tecnologias de Desenvolvimento para Internet III (IFSULDEMINAS, Campus Machado) — Prof. Dr. Emerson A. Carvalho
-Atividade: **Fundamentos do HTTP** — entrega via GitHub até 04/11/2026
+Atividade: **Fundamentos do HTTP** — entrega via GitHub 
 Aluno: Gustavo Teodoro
 
 Cinco Servlets que exploram na prática os métodos HTTP, os cabeçalhos, os códigos de status e o corpo da requisição.
