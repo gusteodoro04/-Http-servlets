@@ -88,6 +88,6 @@ git init
 git add .
 git commit -m "Atividade HTTP com Servlets"
 git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+git remote add origin https://github.com/gusteodoro04/-Http-servlets.git
 git push -u origin main
 ```
