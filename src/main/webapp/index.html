@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explorando o protocolo HTTP com Servlets</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;line-height:1.5;color:#1f2328}
+  h1{font-size:1.5rem}
+  h2{font-size:1.1rem;margin-top:2rem;border-bottom:1px solid #d1d9e0;padding-bottom:.25rem}
+  table{border-collapse:collapse;width:100%;margin:.5rem 0}
+  th,td{border:1px solid #d1d9e0;padding:.35rem .6rem;text-align:left}
+  th{background:#f6f8fa}
+  pre{background:#f6f8fa;padding:.75rem;overflow:auto;white-space:pre-wrap}
+  code{background:#f6f8fa;padding:0 .25rem}
+  label{display:block;font-weight:600}
+  input,textarea{font:inherit;width:100%;max-width:28rem;padding:.35rem;box-sizing:border-box}
+  input[type=number]{width:7rem}
+  button{font:inherit;padding:.4rem .9rem;cursor:pointer}
+  .nota{color:#59636e}
+</style>
+</head>
+<body>
+
+<h1>Explorando o protocolo HTTP com Java Servlets</h1>
+<p class="nota">Tecnologias de Desenvolvimento para Internet III &ndash; Fundamentos do HTTP.
+Cada seção abaixo chama um dos 5 servlets.</p>
+
+<h2>Servlet 1 &ndash; Cabeçalhos da requisição (GET /headers)</h2>
+<p>Mostra o User-Agent, o Referer, o idioma, as codificações aceitas, o IP, a versão do HTTP e todos os outros cabeçalhos.</p>
+<p><a href="headers">Abrir /headers</a></p>
+
+<h2>Servlet 2 &ndash; Corpo da requisição (POST /request-body)</h2>
+<p>O formulário envia os campos por POST e o servlet mostra o corpo da requisição como chegou.</p>
+<form method="post" action="request-body">
+  <p><label for="nome">Nome</label><input type="text" id="nome" name="nome" required></p>
+  <p><label for="email">E-mail</label><input type="email" id="email" name="email" required></p>
+  <p><label for="mensagem">Mensagem</label><textarea id="mensagem" name="mensagem" rows="4" required></textarea></p>
+  <p><button type="submit">Enviar (POST)</button></p>
+</form>
+
+<h2>Servlet 3 &ndash; Sessão e cookies (GET /session)</h2>
+<p>Na primeira visita o servidor grava um cookie com o seu usuário; nas visitas seguintes ele diz &ldquo;Bem-vindo de volta&rdquo;. Abra o link duas vezes.</p>
+<p><a href="session">Abrir /session</a> &middot; <a href="session?acao=sair">Apagar cookie e sessão</a></p>
+
+<h2>Servlet 4 &ndash; Status HTTP (GET /status?code=...)</h2>
+<p>O código de status da resposta vem do parâmetro <code>code</code> da URL. Abra a aba Rede (F12) para ver o status de cada uma:</p>
+<p>
+  <a href="status?code=200">200</a> &middot;
+  <a href="status?code=201">201</a> &middot;
+  <a href="status?code=204">204</a> &middot;
+  <a href="status?code=301">301</a> &middot;
+  <a href="status?code=302">302</a> &middot;
+  <a href="status?code=400">400</a> &middot;
+  <a href="status?code=401">401</a> &middot;
+  <a href="status?code=403">403</a> &middot;
+  <a href="status?code=404">404</a> &middot;
+  <a href="status?code=405">405</a> &middot;
+  <a href="status?code=418">418</a> &middot;
+  <a href="status?code=500">500</a> &middot;
+  <a href="status?code=503">503</a> &middot;
+  <a href="status">lista completa</a>
+</p>
+<form method="get" action="status">
+  <label for="code">Outro código (200 a 599)</label>
+  <p><input type="number" id="code" name="code" min="200" max="599" value="404" required>
+  <button type="submit">Enviar</button></p>
+</form>
+
+<h2>Servlet 5 &ndash; Métodos suportados (OPTIONS /methods)</h2>
+<p>O navegador só envia OPTIONS por script, então o botão abaixo usa <code>fetch</code> com <code>method: 'OPTIONS'</code>.</p>
+<p><button type="button" id="btn-options">Enviar OPTIONS /methods</button>
+<a href="methods">Abrir /methods (GET)</a></p>
+<pre id="saida-options" hidden></pre>
+
+<h2>URLs de teste</h2>
+<table>
+  <tr><th>Método</th><th>URL</th><th>Descrição</th></tr>
+  <tr><td>GET</td><td><code>/headers</code></td><td>Exibe os cabeçalhos da requisição</td></tr>
+  <tr><td>POST</td><td><code>/request-body</code></td><td>Exibe o corpo da requisição recebida (via formulário HTML)</td></tr>
+  <tr><td>GET</td><td><code>/session</code></td><td>Manipulação de sessão e cookies</td></tr>
+  <tr><td>GET</td><td><code>/status?code=404</code></td><td>Responde com o código de status indicado</td></tr>
+  <tr><td>OPTIONS</td><td><code>/methods</code></td><td>Responde com os métodos suportados</td></tr>
+</table>
+
+<script>
+  document.getElementById('btn-options').addEventListener('click', async function () {
+    var saida = document.getElementById('saida-options');
+    saida.hidden = false;
+    saida.textContent = 'Enviando OPTIONS...';
+    try {
+      var resposta = await fetch('methods', { method: 'OPTIONS' });
+      var corpo = await resposta.text();
+      saida.textContent = 'HTTP ' + resposta.status + ' ' + resposta.statusText + '\n'
+        + 'Allow: ' + resposta.headers.get('Allow') + '\n\n' + corpo;
+    } catch (erro) {
+      saida.textContent = 'Erro ao enviar a requisição: ' + erro.message;
+    }
+  });
+</script>
+
+</body>
+</html>
